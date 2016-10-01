@@ -8,21 +8,24 @@ typedef std::vector<std::unique_ptr<Entity> > EntityVector;
 
 typedef void (*EntityCallback)(Entity&);
 ```
-C++11 offers a new syntax to achieve this, known as "alias declaration". The following example achieves the same result is the code snippet above:
+C++11 offers a new syntax to achieve this, known as *alias declaration*. The following example achieves the same result is the code snippet above:
 ```C++
 using EntityVector = std::vector<std::unique_ptr<Entity>>;
 
 using EntityCallback = void(*)(Entity&);
 ```
-In either case, both `EntityVector` and `EntityCallback` are "typedef-names". They are merely aliases, and do not introduce new types. To illustrate:
+In either case, both `EntityVector` and `EntityCallback` are *typedef-names*. They are merely aliases, and do not introduce new types. To illustrate:
 ```C++
 using count = int;
 
 void callback(count number) { }
 void callback(int number) { }
 ```
-In the scenario above, the `callback` functions above are not overloads, but re-definitions of the same function, and an attempt to compile the above example will cause an error.
-
+In the scenario above, the `callback` function definitions are not overloads, but re-definitions of the same function, and an attempt to compile the above example will cause an error. In all of the contexts mentioned so far, there is no difference in the resulting typedef-name whether it was introduced using the `typedef` or `using` keyword, since they both have the same semantics. The following two statements declare the same *typedef-name*; the first statement declares the `EntityCallback` *typedef-name*, and second statement re-declares the same thing:
+```C++
+typedef void (*EntityCallback)(Entity&);
+using EntityCallback = void(*)(Entity&);
+```
 ## Alias templates
 
 Alias declarations can be templetized, something which `typedef` does not natively support. In C++98, this was achieved with class templates and inner `typedef`s:
@@ -45,7 +48,7 @@ private:
 };
 ```
 
-With alias declarations, this is natively supported, and allows us to do away with the `type` hack
+With alias declarations, this is natively supported:
 ```C++
 template <typename T>
 using StringKeyMap = std::map<std::string, T>;
